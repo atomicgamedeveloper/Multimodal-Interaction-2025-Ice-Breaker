@@ -2,16 +2,17 @@ import asyncio
 import json
 from datetime import datetime
 
+# Basic mqtt broker to broadcast messages to wristbands from client
 class Broker:
-    def __init__(self, host='0.0.0.0', port=1883):
+    def __init__(self, host='0.0.0.0', port=1883): # Use mobile hot spot
         self.host = host
         self.port = port
         self.clients = {}
         self.subscriptions = {}
         
     async def handle_client(self, reader, writer):
-        addr = writer.get_extra_info('peername')
-        client_id = f"client_{addr[1]}"
+        address = writer.get_extra_info('peername')
+        client_id = f"client_{address[1]}"
         self.clients[client_id] = {'reader': reader, 'writer': writer}
         print(f"[{datetime.now().strftime('%H:%M:%S')}] New client connected: {client_id}")
         
